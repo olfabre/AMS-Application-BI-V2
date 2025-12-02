@@ -103,10 +103,15 @@ def convert_dataframe_to_usd(dataframe, currencies, conversion_table: pd.DataFra
 def cleaning(dataframe):
     # Suppression des lignes avec une valeur manquante dans la colonne 'name' (4 lignes / +300'000 lignes)
     cleaned_dataframe = dataframe.copy()
+    counter = 0
     for row in cleaned_dataframe.itertuples():
         if (pd.isnull(row.name) or row.name == '?'):
             cleaned_dataframe = cleaned_dataframe.drop(row.Index)
-            #print(f"Ligne {row.Index} supprimée (valeur manquante dans la colonne 'name')")
+            print(f"Ligne {row.Index} supprimée (valeur manquante dans la colonne 'name')")
+        elif row.state in ['live', 'undefined', 'suspended']:
+            cleaned_dataframe = cleaned_dataframe.drop(row.Index)
+            counter += 1
+            print(f"Ligne {row.Index} supprimée (state dans ['live', 'undefined', 'suspended']) | counter : {counter}")
     
     # Remplissage des valeurs manquantes des colonnes 'country' et 'sex' par la valeur la plus fréquente de chaque colonne
     columns_to_impute = ['country', 'sex']
@@ -129,5 +134,14 @@ df_cleaned = cleaning(df)
 print(df_cleaned)
 
 # Enregistrement des données nettoyées dans un fichier CSV
-df_cleaned.to_csv(os.path.join('resources/csv', 'ks-projects-cleaned.csv'), index=False, sep=',', encoding='latin1')
+df_cleaned.to_csv(os.path.join('resources/csv', 'ks-projects-cleaned-state.csv'), index=False, sep=',', encoding='latin1')
 print("Données nettoyées enregistrées dans 'resources/csv/ks-projects-cleaned.csv'")
+
+counter = {}
+for row in df_cleaned.itertuples():
+    if row.state in ['live', 'undefined', 'suspended']:
+        if row.state not in counter:
+            counter[row.state] = 1
+        else:
+            counter[row.state] += 1
+print(counter)
