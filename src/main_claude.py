@@ -155,10 +155,10 @@ def prepar_dataframe(dataframe):
     
     # Encodage vectorisé
     if 'state' in prepared_dataframe.columns:
-        prepared_dataframe['state'] = prepared_dataframe['state'].map({'failed': 0, 'successful': 1})
+        prepared_dataframe['state'] = (prepared_dataframe['state'] == 'successful')
     
     if 'sex' in prepared_dataframe.columns:
-        prepared_dataframe['sex'] = prepared_dataframe['sex'].map({'male': 0, 'female': 1})
+        prepared_dataframe['sex'] = (prepared_dataframe['sex'] == 'female')
     
     return prepared_dataframe
 
@@ -273,7 +273,6 @@ def balanced_split(df, target_col='state', test_size=0.2, val_size=0.2, random_s
 # ====================================
 
 if __name__ == "__main__":
-    '''
     # Nettoyage
     df_cleaned = cleaning(df)
     
@@ -291,14 +290,56 @@ if __name__ == "__main__":
         index=False, sep=',', encoding='latin1'
     )
     print("Données préparées enregistrées !")
-    '''
     
     # Répartition des données
     prepared_dataframe = pd.read_csv(os.path.join('resources/csv', 'prepared_dataframe.csv'), encoding='latin1')
+    
+    print("=" * 80)
+    print("DONNÉES AVANT ENCODAGE")
+    print("=" * 80)
+    print(f"\nShape : {prepared_dataframe.shape}")
+    print(f"\nColonnes : {list(prepared_dataframe.columns)}")
+    print(f"\nPremières lignes :")
+    print(prepared_dataframe.head(10))
+    print(f"\nTypes de données :")
+    print(prepared_dataframe.dtypes)
+    print(f"\nValeurs uniques dans 'category' : {prepared_dataframe['category'].nunique()}")
+    print(f"Valeurs uniques dans 'country' : {prepared_dataframe['country'].nunique()}")
+    
+    # ÉTAPE 1 : OneHotEncoding
     encoded_dataframe = apply_one_hot_encoding(prepared_dataframe, columns_to_encode=['category', 'country'])
+    
+    print("\n" + "=" * 80)
+    print("DONNÉES APRÈS ENCODAGE")
+    print("=" * 80)
+    print(f"\nShape : {encoded_dataframe.shape}")
+    print(f"\nColonnes : {list(encoded_dataframe.columns)}")
+    print(f"\nPremières lignes :")
+    print(encoded_dataframe.head(10))
+    print(f"\nTypes de données :")
+    print(encoded_dataframe.dtypes)
+    
+    # ÉTAPE 2 : Rééquilibrage
     balanced_dataframe = balance_classes(encoded_dataframe, target_col='state', random_state=42)
     
+    print("\n" + "=" * 80)
+    print("DONNÉES APRÈS RÉÉQUILIBRAGE")
+    print("=" * 80)
+    print(f"\nShape : {balanced_dataframe.shape}")
+    print(f"\nPremières lignes :")
+    print(balanced_dataframe.head(10))
+    
+    # ÉTAPE 3 : Split
     train_df, val_df, test_df = balanced_split(balanced_dataframe, target_col='state', test_size=0.15, val_size=0.15)
+    
+    print("\n" + "=" * 80)
+    print("DONNÉES APRÈS SPLIT")
+    print("=" * 80)
+    print(f"\nTrain shape : {train_df.shape}")
+    print(f"Val shape : {val_df.shape}")
+    print(f"Test shape : {test_df.shape}")
+    print(f"\nPremières lignes du TRAIN :")
+    print(train_df.head(5))
     
     '''
     print(f"State mean - Train: {train_df['state'].mean():.3f}, Val: {val_df['state'].mean():.3f}, Test: {test_df['state'].mean():.3f}")
