@@ -259,6 +259,35 @@ def analyze_categorical_numerical(df, cat_var, num_var, use_log=False, figsize=(
     
     return stats_summary
 
+def prepar_dataframe(dataframe):
+    prepared_dataframe = dataframe.copy()
+    
+    col_to_imput = ['id', 'name', 'subcategory', 'pledged_usd', 'backers']
+    for col in col_to_imput:
+        if col in prepared_dataframe.columns:
+            prepared_dataframe = prepared_dataframe.drop(col, axis=1)
+    
+    prepared_dataframe['start_date'] = pd.to_datetime(prepared_dataframe['start_date'])
+    prepared_dataframe['end_date'] = pd.to_datetime(prepared_dataframe['end_date'])
+    
+    prepared_dataframe['duration'] = (prepared_dataframe['end_date'] - prepared_dataframe['start_date']).dt.total_seconds().astype(int)
+    
+    prepared_dataframe['start_year'] = prepared_dataframe['start_date'].dt.year
+    prepared_dataframe['start_month'] = prepared_dataframe['start_date'].dt.month
+    
+    col_date = ['start_date', 'end_date']
+    for col in col_date:
+        if col in prepared_dataframe.columns:
+            prepared_dataframe = prepared_dataframe.drop(col, axis=1)
+            
+    if 'state' in prepared_dataframe.columns:
+        prepared_dataframe['state'] = prepared_dataframe['state'].map({'failed': 0, 'successful': 1})
+        
+    if 'sex' in prepared_dataframe.columns:
+        prepared_dataframe['sex'] = prepared_dataframe['sex'].map({'male': 0, 'female': 1})
+    
+    return prepared_dataframe
+
 #print(f"Liste des devises utilisées : {get_currencies(df)}")
 
 #count = df.isnull().sum()
@@ -268,7 +297,7 @@ def analyze_categorical_numerical(df, cat_var, num_var, use_log=False, figsize=(
 #print(f"Nombre de valeurs manquantes par colonne après nettoyage :\n{count_cleaned}")
 
 df = pd.read_csv(os.path.join('resources/csv', 'ks-projects-cleaned-state.csv'), encoding='latin1')
-#df_cleaned = df
+df_cleaned = df
 
 counter = {}
 for row in df.itertuples():
@@ -279,35 +308,38 @@ for row in df.itertuples():
             counter[row.state] += 1
 print(counter)
 
-df_cleaned = cleaning(df)
+#df_cleaned = cleaning(df)
 print(df_cleaned)
 
 # Enregistrement des données nettoyées dans un fichier CSV
-df_cleaned.to_csv(os.path.join('resources/csv', 'ks-projects-cleaned-state.csv'), index=False, sep=',', encoding='latin1')
-print("Données nettoyées enregistrées dans 'resources/csv/ks-projects-cleaned-state.csv'")
+#df_cleaned.to_csv(os.path.join('resources/csv', 'ks-projects-cleaned-state.csv'), index=False, sep=',', encoding='latin1')
+#print("Données nettoyées enregistrées dans 'resources/csv/ks-projects-cleaned-state.csv'")
 
-counter = {}
-for row in df_cleaned.itertuples():
-    if row.state in ['live', 'undefined', 'suspended', 'canceled']:
-        if row.state not in counter:
-            counter[row.state] = 1
-        else:
-            counter[row.state] += 1
-print(counter)
+#counter = {}
+#for row in df_cleaned.itertuples():
+#    if row.state in ['live', 'undefined', 'suspended', 'canceled']:
+#        if row.state not in counter:
+#            counter[row.state] = 1
+#        else:
+#            counter[row.state] += 1
+#print(counter)
 
 #analyze_categorical_numerical(df_cleaned, 'state', 'goal_usd', use_log=True)
 col_cat = ['state', 'category', 'sex', 'country']
 col_num = ['goal_usd', 'pledged_usd', 'backers', 'age']
 col_log = ['goal_usd', 'pledged_usd', 'backers']
 
-for cat in col_cat:
-    for num in col_num:
-        log = False
-        if num in col_log:
-            log = True
-        analyze_categorical_numerical(df_cleaned, cat, num, use_log=log)
+#for cat in col_cat:
+#    for num in col_num:
+#        log = False
+#        if num in col_log:
+#            log = True
+#        analyze_categorical_numerical(df_cleaned, cat, num, use_log=log)
 
 #for i in range(len(df_cleaned)):
 #    for num in col_num:
 #        if df_cleaned.loc[i, num] > 0 and df_cleaned.loc[i, num] < 1:
 #            print(f'{i} : {df_cleaned.loc[i, num]} | {num}')
+
+prepared_dataframe = prepar_dataframe(df_cleaned)
+prepared_dataframe.to_csv(os.path.join('resources/csv', 'prepared_dataframe.csv'), index=False, sep=',', encoding='latin1')
