@@ -126,7 +126,6 @@ def cleaning(dataframe):
     
     return cleaned_dataframe
 
-
 # Fonction de préparation OPTIMISÉE
 def prepar_dataframe(dataframe):
     """Version optimisée de la préparation"""
@@ -162,6 +161,32 @@ def prepar_dataframe(dataframe):
         prepared_dataframe['sex'] = prepared_dataframe['sex'].map({'male': 0, 'female': 1})
     
     return prepared_dataframe
+
+# Application du OneHotEncoding sur 'category', 'country'
+def apply_one_hot_encoding(df, columns_to_encode=['category', 'country']):
+    """
+    Applique le OneHotEncoding sur les colonnes catégorielles spécifiées
+    """
+    df_encoded = df.copy()
+    
+    print(f"Colonnes avant encodage : {list(df_encoded.columns)}")
+    print(f"Shape avant encodage : {df_encoded.shape}")
+    
+    # Vérifier que les colonnes existent
+    columns_to_encode = [col for col in columns_to_encode if col in df_encoded.columns]
+    
+    if not columns_to_encode:
+        print("Aucune colonne à encoder trouvée.")
+        return df_encoded
+    
+    # Appliquer OneHotEncoding avec pandas (plus simple)
+    df_encoded = pd.get_dummies(df_encoded, columns=columns_to_encode, prefix=columns_to_encode, drop_first=False)
+    
+    print(f"\nColonnes après encodage : {list(df_encoded.columns)}")
+    print(f"Shape après encodage : {df_encoded.shape}")
+    print(f"Nombre de nouvelles colonnes créées : {df_encoded.shape[1] - df.shape[1] + len(columns_to_encode)}")
+    
+    return df_encoded
 
 # Rééquilibrer la classe 'state'
 def balance_classes(df, target_col='state', random_state=42):
@@ -270,10 +295,12 @@ if __name__ == "__main__":
     
     # Répartition des données
     prepared_dataframe = pd.read_csv(os.path.join('resources/csv', 'prepared_dataframe.csv'), encoding='latin1')
-    balanced_dataframe = balance_classes(prepared_dataframe, target_col='state', random_state=42)
+    encoded_dataframe = apply_one_hot_encoding(prepared_dataframe, columns_to_encode=['category', 'country'])
+    balanced_dataframe = balance_classes(encoded_dataframe, target_col='state', random_state=42)
     
     train_df, val_df, test_df = balanced_split(balanced_dataframe, target_col='state', test_size=0.15, val_size=0.15)
     
+    '''
     print(f"State mean - Train: {train_df['state'].mean():.3f}, Val: {val_df['state'].mean():.3f}, Test: {test_df['state'].mean():.3f}")
     print("=== Comptages par division ===")
     print(f"\nTrain:")
@@ -296,3 +323,6 @@ if __name__ == "__main__":
     print(f"Train: {(train_df['state'] == 1).sum() / len(train_df) * 100:.1f}%")
     print(f"Val:   {(val_df['state'] == 1).sum() / len(val_df) * 100:.1f}%")
     print(f"Test:  {(test_df['state'] == 1).sum() / len(test_df) * 100:.1f}%")
+    '''
+    
+    
