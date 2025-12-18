@@ -1,0 +1,173 @@
+================================================================================
+ENTRAÎNEMENT DES MODÈLES AVEC OPTIMISATION DES HYPERPARAMÈTRES
+================================================================================
+Chargement des données...
+Train shape: (147058, 40)
+Val shape: (31513, 40)
+Test shape: (31513, 40)
+
+Préparation des données...
+
+Normalisation des features...
+
+================================================================================
+DÉBUT DES TESTS AVEC GRIDSEARCH
+================================================================================
+
+================================================================================
+GridSearch : KNN
+================================================================================
+Paramètres testés : 5
+
+✓ Meilleurs paramètres : {'metric': 'euclidean', 'n_neighbors': 11, 'weights': 'uniform'}
+✓ Meilleur score F1 (val) : 0.6107
+Temps total : 182.00s
+
+--- Résultats TEST ---
+Accuracy:  0.6187
+Precision: 0.6214
+Recall:    0.6075
+F1-Score:  0.6144
+MCC:       0.2375
+AUC-ROC:   0.6630
+
+--- Matrice de confusion (TEST) ---
+[[9925 5831]
+ [6185 9572]]
+VP: 9572, VN: 9925, FP: 5831, FN: 6185
+
+================================================================================
+GridSearch : Naive Bayes
+================================================================================
+Paramètres testés : 4
+
+✓ Meilleurs paramètres : {'var_smoothing': 1e-09}
+✓ Meilleur score F1 (val) : 0.6726
+Temps total : 0.64s
+
+--- Résultats TEST ---
+Accuracy:  0.5490
+Precision: 0.5277
+Recall:    0.9355
+F1-Score:  0.6748
+MCC:       0.1546
+AUC-ROC:   0.6566
+
+--- Matrice de confusion (TEST) ---
+[[ 2561 13195]
+ [ 1016 14741]]
+VP: 14741, VN: 2561, FP: 13195, FN: 1016
+
+================================================================================
+GridSearch : Decision Tree
+================================================================================
+Paramètres testés : 5
+
+✓ Meilleurs paramètres : {'criterion': 'gini', 'max_depth': 5, 'min_samples_leaf': 1, 'min_samples_split': 2}
+✓ Meilleur score F1 (val) : 0.6531
+Temps total : 18.14s
+
+--- Résultats TEST ---
+Accuracy:  0.6270
+Precision: 0.6125
+Recall:    0.6916
+F1-Score:  0.6496
+MCC:       0.2561
+AUC-ROC:   0.6730
+
+--- Matrice de confusion (TEST) ---
+[[ 8861  6895]
+ [ 4860 10897]]
+VP: 10897, VN: 8861, FP: 6895, FN: 4860
+
+================================================================================
+GridSearch : Random Forest
+================================================================================
+Paramètres testés : 3
+
+✓ Meilleurs paramètres : {'max_depth': 20, 'max_features': 'sqrt', 'min_samples_leaf': 2, 'min_samples_split': 10, 'n_estimators': 300}
+✓ Meilleur score F1 (val) : 0.6656
+Temps total : 866.58s
+
+--- Résultats TEST ---
+Accuracy:  0.6617
+Precision: 0.6594
+Recall:    0.6689
+F1-Score:  0.6641
+MCC:       0.3234
+AUC-ROC:   0.7212
+
+--- Matrice de confusion (TEST) ---
+[[10311  5445]
+ [ 5217 10540]]
+VP: 10540, VN: 10311, FP: 5445, FN: 5217
+
+================================================================================
+GridSearch : Logistic Regression
+================================================================================
+Paramètres testés : 6
+
+✓ Meilleurs paramètres : {'C': 10, 'max_iter': 1000, 'penalty': 'l2', 'solver': 'lbfgs'}
+✓ Meilleur score F1 (val) : 0.6430
+Temps total : 95.30s
+
+--- Résultats TEST ---
+Accuracy:  0.6301
+Precision: 0.6226
+Recall:    0.6603
+F1-Score:  0.6409
+MCC:       0.2606
+AUC-ROC:   0.6822
+
+--- Matrice de confusion (TEST) ---
+[[ 9450  6306]
+ [ 5352 10405]]
+VP: 10405, VN: 9450, FP: 6306, FN: 5352
+
+================================================================================
+TABLEAU RÉCAPITULATIF FINAL
+================================================================================
+
+--- Performances sur TEST ---
+              model  test_accuracy  test_precision  test_recall  test_f1  test_mcc  test_auc_roc
+                KNN       0.618697        0.621437     0.607476 0.614377  0.237455      0.662992
+        Naive Bayes       0.549043        0.527670     0.935521 0.674753  0.154568      0.656638
+      Decision Tree       0.626979        0.612466     0.691566 0.649617  0.256101      0.673006
+      Random Forest       0.661663        0.659368     0.668909 0.664104  0.323360      0.721235
+Logistic Regression       0.630057        0.622644     0.660341 0.640939  0.260592      0.682193
+
+--- Temps d'entraînement ---
+              model  training_time
+                KNN     181.995311
+        Naive Bayes       0.639188
+      Decision Tree      18.135404
+      Random Forest     866.584436
+Logistic Regression      95.296409
+
+================================================================================
+GÉNÉRATION DES VISUALISATIONS
+================================================================================
+
+✓ Graphique sauvegardé : comparison_models_optimized.png
+
+Analyse de l'importance des features (Random Forest)...
+
+✓ Graphique sauvegardé : feature_importance_Random_Forest.png
+
+Top 10 features importantes (Random Forest) :
+  1. goal_usd: 0.2592
+  2. duration: 0.2076
+  3. age: 0.1328
+  4. start_year: 0.0947
+  5. start_month: 0.0831
+  6. category_Music: 0.0264
+  7. category_Theater: 0.0209
+  8. category_Technology: 0.0191
+  9. category_Fashion: 0.0163
+  10. category_Publishing: 0.0154
+
+✓ Résultats sauvegardés : model_comparison_optimized.csv
+
+================================================================================
+OPTIMISATION TERMINÉE !
+================================================================================

@@ -1,0 +1,206 @@
+Chargement des données...
+Train shape: (147058, 40)
+Val shape: (31513, 40)
+Test shape: (31513, 40)
+
+Préparation des données...
+
+Normalisation des features...
+
+================================================================================
+DÉBUT DES TESTS DES ALGORITHMES
+================================================================================
+
+================================================================================
+Entraînement : KNN
+================================================================================
+Temps d'entraînement : 0.03s
+
+--- Résultats sur TRAIN ---
+Accuracy:  0.7324
+Precision: 0.7346
+Recall:    0.7275
+F1-Score:  0.7310
+
+--- Résultats sur VALIDATION ---
+Accuracy:  0.5968
+Precision: 0.5987
+Recall:    0.5870
+F1-Score:  0.5928
+
+--- Résultats sur TEST ---
+Accuracy:  0.6028
+Precision: 0.6042
+Recall:    0.5961
+F1-Score:  0.6001
+AUC-ROC:   0.6351
+
+--- Matrice de confusion (TEST) ---
+[[9604 6152]
+ [6365 9392]]
+
+================================================================================
+Entraînement : Naive Bayes
+================================================================================
+Temps d'entraînement : 0.09s
+
+--- Résultats sur TRAIN ---
+Accuracy:  0.5470
+Precision: 0.5265
+Recall:    0.9330
+F1-Score:  0.6731
+
+--- Résultats sur VALIDATION ---
+Accuracy:  0.5469
+Precision: 0.5265
+Recall:    0.9306
+F1-Score:  0.6726
+
+--- Résultats sur TEST ---
+Accuracy:  0.5487
+Precision: 0.5274
+Recall:    0.9353
+F1-Score:  0.6745
+AUC-ROC:   0.6564
+
+--- Matrice de confusion (TEST) ---
+[[ 2552 13204]
+ [ 1019 14738]]
+
+================================================================================
+Entraînement : Decision Tree
+================================================================================
+Temps d'entraînement : 0.96s
+
+--- Résultats sur TRAIN ---
+Accuracy:  0.9885
+Precision: 0.9980
+Recall:    0.9789
+F1-Score:  0.9884
+
+--- Résultats sur VALIDATION ---
+Accuracy:  0.5791
+Precision: 0.5797
+Recall:    0.5753
+F1-Score:  0.5775
+
+--- Résultats sur TEST ---
+Accuracy:  0.5749
+Precision: 0.5758
+Recall:    0.5691
+F1-Score:  0.5725
+AUC-ROC:   0.5762
+
+--- Matrice de confusion (TEST) ---
+[[9150 6606]
+ [6789 8968]]
+
+================================================================================
+Entraînement : Random Forest
+================================================================================
+Temps d'entraînement : 2.66s
+
+--- Résultats sur TRAIN ---
+Accuracy:  0.9885
+Precision: 0.9891
+Recall:    0.9878
+F1-Score:  0.9885
+
+--- Résultats sur VALIDATION ---
+Accuracy:  0.6325
+Precision: 0.6315
+Recall:    0.6359
+F1-Score:  0.6337
+
+--- Résultats sur TEST ---
+Accuracy:  0.6373
+Precision: 0.6366
+Recall:    0.6396
+F1-Score:  0.6381
+AUC-ROC:   0.6828
+
+--- Matrice de confusion (TEST) ---
+[[10004  5752]
+ [ 5679 10078]]
+
+================================================================================
+Entraînement : Logistic Regression
+================================================================================
+Temps d'entraînement : 0.18s
+
+--- Résultats sur TRAIN ---
+Accuracy:  0.6317
+Precision: 0.6244
+Recall:    0.6611
+F1-Score:  0.6422
+
+--- Résultats sur VALIDATION ---
+Accuracy:  0.6328
+Precision: 0.6258
+Recall:    0.6604
+F1-Score:  0.6426
+
+--- Résultats sur TEST ---
+Accuracy:  0.6286
+Precision: 0.6211
+Recall:    0.6596
+F1-Score:  0.6398
+AUC-ROC:   0.6813
+
+--- Matrice de confusion (TEST) ---
+[[ 9415  6341]
+ [ 5363 10394]]
+
+--- Matrice de confusion (TEST) ---
+[[ 9415  6341]
+ [ 5363 10394]]
+
+[[ 9415  6341]
+ [ 5363 10394]]
+
+ [ 5363 10394]]
+
+================================================================================
+TABLEAU RÉCAPITULATIF
+
+================================================================================
+TABLEAU RÉCAPITULATIF
+================================================================================
+================================================================================
+TABLEAU RÉCAPITULATIF
+================================================================================
+
+TABLEAU RÉCAPITULATIF
+================================================================================
+
+--- Performances sur TEST ---
+================================================================================
+
+--- Performances sur TEST ---
+
+--- Performances sur TEST ---
+              model  test_accuracy  test_precision  test_recall  test_f1
+--- Performances sur TEST ---
+              model  test_accuracy  test_precision  test_recall  test_f1
+                KNN       0.602799        0.604220     0.596053 0.600109
+              model  test_accuracy  test_precision  test_recall  test_f1
+                KNN       0.602799        0.604220     0.596053 0.600109
+        Naive Bayes       0.548662        0.527450     0.935330 0.674523
+                KNN       0.602799        0.604220     0.596053 0.600109
+        Naive Bayes       0.548662        0.527450     0.935330 0.674523
+        Naive Bayes       0.548662        0.527450     0.935330 0.674523
+      Decision Tree       0.574937        0.575832     0.569144 0.572468
+      Random Forest       0.637261        0.636639     0.639589 0.638111
+Logistic Regression       0.628598        0.621094     0.659643 0.639788
+
+Génération des graphiques...
+
+Graphique sauvegardé : comparison_models.png
+
+Graphique sauvegardé : training_time.png
+
+Résultats sauvegardés : model_comparison_results.csv
+
+================================================================================
+TESTS TERMINÉS !
+================================================================================
