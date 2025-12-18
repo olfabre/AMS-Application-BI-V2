@@ -220,9 +220,6 @@ def balance_classes(df, target_col='state', random_state=42):
 
 # Fonction de répartition équitable des données
 def balanced_split(df, target_col='state', test_size=0.2, val_size=0.2, random_state=42):
-    """
-    Découpe équilibré sur target + colonnes numériques
-    """
     df_copy = df.copy()
     
     # Colonnes numériques à équilibrer
@@ -267,6 +264,26 @@ def balanced_split(df, target_col='state', test_size=0.2, val_size=0.2, random_s
     test = df.loc[test_idx]
     
     return train, val, test
+
+# Fonction pour enregistrer les sections faites (train, validate, test)
+def save_splits(train_df, val_df, test_df, output_dir='resources/csv'):
+    os.makedirs(output_dir, exist_ok=True)
+    
+    train_path = os.path.join(output_dir, 'train.csv')
+    val_path = os.path.join(output_dir, 'val.csv')
+    test_path = os.path.join(output_dir, 'test.csv')
+    
+    train_df.to_csv(train_path, index=False, encoding='latin1')
+    val_df.to_csv(val_path, index=False, encoding='latin1')
+    test_df.to_csv(test_path, index=False, encoding='latin1')
+    
+    print(f"\n{'='*80}")
+    print("SAUVEGARDE DES DIVISIONS")
+    print(f"{'='*80}")
+    print(f"✓ Train sauvegardé : {train_path} ({len(train_df)} lignes)")
+    print(f"✓ Validation sauvegardé : {val_path} ({len(val_df)} lignes)")
+    print(f"✓ Test sauvegardé : {test_path} ({len(test_df)} lignes)")
+    print(f"{'='*80}\n")
 
 # ====================================
 # EXEMPLE D'UTILISATION
@@ -331,6 +348,7 @@ if __name__ == "__main__":
     
     # ÉTAPE 3 : Split
     train_df, val_df, test_df = balanced_split(balanced_dataframe, target_col='state', test_size=0.15, val_size=0.15)
+    save_splits(train_df, val_df, test_df)
     
     print("\n" + "=" * 80)
     print("DONNÉES APRÈS SPLIT")
